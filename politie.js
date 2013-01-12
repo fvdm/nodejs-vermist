@@ -53,7 +53,7 @@ app.talk = function( path, props, callback ) {
 		path:		path,
 		method:		'GET',
 		headers: {
-			'User-Agent': 'politie.nl (https://github.com/fvdm/nodejs-politie)'
+			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17'
 		}
 	}
 	
