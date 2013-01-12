@@ -37,7 +37,7 @@ var http = require('http'),
 module.exports = function() {
 	
 	// Persoon informatie
-	// app.vermist ( persoonURL, callback )
+	// vermist ( persoonURL, callback )
 	
 	if( arguments[0].match( /^http:\/\// ) ) {
 		var callback = arguments[1]
@@ -132,7 +132,7 @@ module.exports = function() {
 	} else {
 	
 		// Personen lijst of zoeken
-		// app.vermist ( categorie, [props], callback )
+		// vermist ( categorie, [props], callback )
 		
 		// Eén $page bevat max 16 personen
 		
