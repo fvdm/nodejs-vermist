@@ -118,7 +118,26 @@ app.talk = function( path, props, callback ) {
 		response.on( 'close', function() { callback( new Error('connection dropped') ) })
 		response.on( 'end', function() {
 			data = data.toString('utf8').trim()
-			callback( null, data )
+			
+			if( response.statusCode == 404 ) {
+				var err = new Error('not found')
+				err.request = options
+				err.response = {
+					headers: response.headers,
+					body: data
+				}
+				callback( err )
+			} else if( response.statusCode >= 300 ) {
+				var err = new Error('service error')
+				err.request = options
+				err.response = {
+					headers: response.headers,
+					body: data
+				}
+				callback( err )
+			} else {
+				callback( null, data )
+			}
 		})
 	})
 	
