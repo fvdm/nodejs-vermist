@@ -91,7 +91,7 @@ vermist( 'kinderen', {geoquery: 'utrecht', distance: 10}, console.log )
 ### vermist ( url, callback )
 
 ```js
-ver vermist = require('vermist')
+var vermist = require('vermist')
 
 vermist( 'http://www.politie.nl/vermist/vermiste-volwassenen/1974/december/02-franciscus-theijn.html', console.log )
 ```
