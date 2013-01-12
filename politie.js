@@ -32,7 +32,7 @@ For more information, please refer to <http://unlicense.org>
 
 var http = require('http'),
     querystring = require('querystring'),
-    app = {}
+    app = { vermist: {}, gezocht: {} }
 
 
 app.talk = function( path, props, callback ) {
