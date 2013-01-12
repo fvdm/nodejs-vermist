@@ -35,6 +35,59 @@ var http = require('http'),
     app = { vermist: {}, gezocht: {} }
 
 
+// Vermiste personen
+// app.vermist ( categorie, [props], callback )
+
+// Eén $page bevat max 16 personen
+
+// CATEGORIE:
+//	alles
+//	kinderen
+//	volwassenen
+//	ongeidentificeerd
+
+// PROPS:
+//	page		: pagina nummer
+// 	query		: trefwoorden
+// 	geoquery	: locatie
+// 	distance	: afstand van `geoquery`  in KM, bijv. 2.0
+
+app.vermist = function( categorie, props, callback ) {
+	if( typeof props === 'function' ) {
+		var callback = props
+		var props = {}
+	}
+	
+	switch( categorie ) {
+		case 'kinderen':		var cat = '/vermiste-kinderen'; break
+		case 'volwassenen':		var cat = '/vermiste-volwassenen'; break
+		case 'ongeidentificeerd':	var cat = '/ongeidentificeerd'; break
+		case 'alles': default:		var cat = ''; break
+	}
+	
+	app.talk( 'vermist'+ cat, props, function( err, data ){
+		if( !err ) {
+			var personen = []
+			
+			data.replace( /<li class="profileBlock[^"]*">[\s\n]+<a href="(\/vermist\/([^\/]+)\/([0-9]{4})\/([a-z]+)\/[^\.]+\.html)" title="[^"]+">[\s\n]+<img class="profile" src="([^"]+)" alt="[^"]+"\/>[\s\n]+<span class="definition">([^<]+)<\/span>[\s\n]+Sinds: ([0-9]{2}\-[0-9]{2}\-[0-9]{4})<br\/>Laatst gezien in: ([^<]+)<\/a>[\s\n]+<\/li>/g, function( s, path, cat, jaar, maand, image, naam, sinds, locatie ) {
+				personen.push({
+					naam:		naam,
+					url:		'http://www.politie.nl'+ path,
+					thumbnail:	'http://www.politie.nl'+ image,
+					categorie:	cat,
+					vermistJaar:	jaar,
+					vermistMaand:	maand,
+					vermistDatum:	sinds,
+					vermistLocatie:	locatie
+				})
+			})
+			
+			callback( null, personen )
+		}
+	})
+}
+
+
 app.talk = function( path, props, callback ) {
 	if( typeof props === 'function' ) {
 		var callback = props
