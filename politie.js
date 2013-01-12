@@ -83,6 +83,8 @@ app.vermist = function( categorie, props, callback ) {
 			})
 			
 			callback( null, personen )
+		} else {
+			callback( err )
 		}
 	})
 }
