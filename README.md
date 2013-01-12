@@ -75,6 +75,14 @@ vermist( 'kinderen', {geoquery: 'utrecht', distance: 10}, console.log )
 ```
 
 
+#### Zoekfilters:
+
+	page       : pagina nummer, één pagina heeft max 16 personen
+	query      : zoekwoord
+	geoquery   : locatie
+	distance   : afstand rond locatie in KM, bijv. 10
+
+
 ### Persoon
 
 ```js
