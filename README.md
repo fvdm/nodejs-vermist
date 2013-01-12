@@ -46,7 +46,7 @@ function callback( err, data ) {
 Gebruik
 -------
 
-De module is slechts één functie die op twee manier aangesproken kan worden.
+De module is slechts één functie die op twee manier aangesproken kan worden. De lijst is gesorteerd zoals het op de site staat.
 
 
 ### Lijst
@@ -54,9 +54,10 @@ De module is slechts één functie die op twee manier aangesproken kan worden.
 ```js
 var vermist = require('vermist')
 
+// gecombineerde lijst
 vermist( console.log )
 
-// lijst categorie (kinderen, volwassenen, ongeidentificeerd)
+// lijst categorie (alles, kinderen, volwassenen, ongeidentificeerd)
 vermist( 'kinderen', console.log )
 
 // lijst zoeken
