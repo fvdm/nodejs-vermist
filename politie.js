@@ -35,155 +35,165 @@ var http = require('http'),
     app = { vermist: {}, gezocht: {} }
 
 
-// Vermist persoon
-// app.vermistPersoon ( url, callback )
-
-app.vermistPersoon = function( url, callback ) {
-	var path = url.replace( 'http://www.politie.nl/', '' )
-	app.talk( path, function( err, data ) {
-		if( !err ) {
-			
-			var persoon = {}
-			
-			data.replace( /<div class="contentDetail wanted">[\s\n]*<h1>Vermist<\/h1><h2>([^<]+)<\/h2>/, function( s, naam ) {
-				persoon.naam = naam
-			})
-			
-			data.replace( /<th>Laatste update:<\/th>[\s\n]*<td>([0-9]{2}\-[0-9]{2}\-[0-9]{4}) \| ([0-9]{2}:[0-9]{2})<\/td>/, function( s, datum, tijd ) {
-				persoon.updateDatum = datum
-				persoon.updateTijd = tijd
-			})
-			
-			data.replace( /<th>Zaaknummer:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, zaak ) {
-				persoon.zaaknummer = zaak
-			})
-			
-			data.replace( /<th>Vermist sinds:<\/th><td>([0-9]{2}\-[0-9]{2}\-[0-9]{4})<\/td>/, function( s, datum ) {
-				persoon.vermistDatum = datum
-			})
-			
-			data.replace( /<th>Laatst gezien in:<\/th><td>([^<]+)<\/td>/, function( s, locatie ) {
-				persoon.vermistLocatie = locatie
-			})
-			
-			data.replace( /<a rel="group-media-gallery" class="gallery-fancybox" href="([^"]+)" title="[^"]+">/, function( s, foto ) {
-				persoon.fotoGroot = 'http://www.politie.nl'+ foto
-			})
-			
-			data.replace( /<img class="profile" src="([^"]+)" alt="[^"]*"\/>/, function( s, foto ) {
-				persoon.fotoKlein = 'http://www.politie.nl'+ foto
-			})
-			
-			data.replace( /<p>([^<]+)<\/p>/g, function( s, tekst ) {
-				tekst = tekst.replace( /[\r\n]+/, ' ' )
-				if( persoon.omschrijving === undefined ) {
-					persoon.omschrijving = [tekst]
-				} else {
-					persoon.omschrijving.push( tekst )
-				}
-			})
-			
-			data.replace( /<a href="([^"]+)" class="continue">Naar het tipformulier<\/a>/, function( s, tip ) {
-				persoon.tipformulier = tip
-			})
-			
-			data.replace( /<th>Voornaam:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, voornaam ) {
-				persoon.voornaam = voornaam
-			})
-			
-			data.replace( /<th>Naam:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, naam ) {
-				persoon.achternaam = naam
-			})
-			
-			data.replace( /<th>Geboortedatum:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, geb ) {
-				persoon.geboorteDatum = geb
-			})
-			
-			data.replace( /<th>Huidige leeftijd:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, leeftijd ) {
-				persoon.huidigeLeeftijd = leeftijd
-			})
-			
-			data.replace( /<th>Lengte:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, lengte ) {
-				persoon.lengte = lengte
-			})
-			
-			data.replace( /<th>Haarkleur:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, haarkleur ) {
-				persoon.haarkleur = haarkleur
-			})
-			
-			data.replace( /<th>Oogkleur:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, oogkleur ) {
-				persoon.oogkleur = oogkleur
-			})
-			
-			data.replace( /<th>Geslacht:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, geslacht ) {
-				persoon.geslacht = geslacht
-			})
-			
-			callback( null, persoon )
-			
-		} else {
-			callback( err )
-		}
-	})
-}
-
-
-// Vermiste personen
-// app.vermist ( categorie, [props], callback )
-
-// Eén $page bevat max 16 personen
-
-// CATEGORIE:
-//	alles
-//	kinderen
-//	volwassenen
-//	ongeidentificeerd
-
-// PROPS:
-//	page		: pagina nummer
-// 	query		: trefwoorden
-// 	geoquery	: locatie
-// 	distance	: afstand van `geoquery`  in KM, bijv. 2.0
-
-app.vermist = function( categorie, props, callback ) {
-	if( typeof props === 'function' ) {
-		var callback = props
-		var props = {}
-	}
+module.exports = function() {
 	
-	switch( categorie ) {
-		case 'kinderen':		var cat = '/vermiste-kinderen'; break
-		case 'volwassenen':		var cat = '/vermiste-volwassenen'; break
-		case 'ongeidentificeerd':	var cat = '/ongeidentificeerd'; break
-		case 'alles': default:		var cat = ''; break
-	}
+	// Persoon informatie
+	// app.vermist ( persoonURL, callback )
 	
-	app.talk( 'vermist'+ cat, props, function( err, data ){
-		if( !err ) {
-			var personen = []
-			
-			data.replace( /<li class="profileBlock[^"]*">[\s\n]+<a href="(\/vermist\/([^\/]+)\/([0-9]{4})\/([a-z]+)\/[^\.]+\.html)" title="[^"]+">[\s\n]+<img class="profile" src="([^"]+)" alt="[^"]+"\/>[\s\n]+<span class="definition">([^<]+)<\/span>[\s\n]+Sinds: ([0-9]{2}\-[0-9]{2}\-[0-9]{4})<br\/>Laatst gezien in: ([^<]+)<\/a>[\s\n]+<\/li>/g, function( s, path, cat, jaar, maand, image, naam, sinds, locatie ) {
-				personen.push({
-					naam:		naam,
-					url:		'http://www.politie.nl'+ path,
-					thumbnail:	'http://www.politie.nl'+ image,
-					categorie:	cat,
-					vermistJaar:	jaar,
-					vermistMaand:	maand,
-					vermistDatum:	sinds,
-					vermistLocatie:	locatie
+	if( arguments[0].match( /^http:\/\// ) ) {
+		var callback = arguments[1]
+		var path = arguments[0].replace( 'http://www.politie.nl/', '' )
+		
+		talk( path, function( err, data ) {
+			if( !err ) {
+				
+				var persoon = {}
+				
+				data.replace( /<div class="contentDetail wanted">[\s\n]*<h1>Vermist<\/h1><h2>([^<]+)<\/h2>/, function( s, naam ) {
+					persoon.naam = naam
 				})
-			})
-			
-			callback( null, personen )
-		} else {
-			callback( err )
+				
+				data.replace( /<th>Laatste update:<\/th>[\s\n]*<td>([0-9]{2}\-[0-9]{2}\-[0-9]{4}) \| ([0-9]{2}:[0-9]{2})<\/td>/, function( s, datum, tijd ) {
+					persoon.updateDatum = datum
+					persoon.updateTijd = tijd
+				})
+				
+				data.replace( /<th>Zaaknummer:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, zaak ) {
+					persoon.zaaknummer = zaak
+				})
+				
+				data.replace( /<th>Vermist sinds:<\/th><td>([0-9]{2}\-[0-9]{2}\-[0-9]{4})<\/td>/, function( s, datum ) {
+					persoon.vermistDatum = datum
+				})
+				
+				data.replace( /<th>Laatst gezien in:<\/th><td>([^<]+)<\/td>/, function( s, locatie ) {
+					persoon.vermistLocatie = locatie
+				})
+				
+				data.replace( /<a rel="group-media-gallery" class="gallery-fancybox" href="([^"]+)" title="[^"]+">/, function( s, foto ) {
+					persoon.fotoGroot = 'http://www.politie.nl'+ foto
+				})
+				
+				data.replace( /<img class="profile" src="([^"]+)" alt="[^"]*"\/>/, function( s, foto ) {
+					persoon.fotoKlein = 'http://www.politie.nl'+ foto
+				})
+				
+				data.replace( /<p>([^<]+)<\/p>/g, function( s, tekst ) {
+					tekst = tekst.replace( /[\r\n]+/, ' ' )
+					if( persoon.omschrijving === undefined ) {
+						persoon.omschrijving = [tekst]
+					} else {
+						persoon.omschrijving.push( tekst )
+					}
+				})
+				
+				data.replace( /<a href="([^"]+)" class="continue">Naar het tipformulier<\/a>/, function( s, tip ) {
+					persoon.tipformulier = tip
+				})
+				
+				data.replace( /<th>Voornaam:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, voornaam ) {
+					persoon.voornaam = voornaam
+				})
+				
+				data.replace( /<th>Naam:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, naam ) {
+					persoon.achternaam = naam
+				})
+				
+				data.replace( /<th>Geboortedatum:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, geb ) {
+					persoon.geboorteDatum = geb
+				})
+				
+				data.replace( /<th>Huidige leeftijd:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, leeftijd ) {
+					persoon.huidigeLeeftijd = leeftijd
+				})
+				
+				data.replace( /<th>Lengte:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, lengte ) {
+					persoon.lengte = lengte
+				})
+				
+				data.replace( /<th>Haarkleur:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, haarkleur ) {
+					persoon.haarkleur = haarkleur
+				})
+				
+				data.replace( /<th>Oogkleur:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, oogkleur ) {
+					persoon.oogkleur = oogkleur
+				})
+				
+				data.replace( /<th>Geslacht:<\/th>[\s\n]*<td>([^<]+)<\/td>/, function( s, geslacht ) {
+					persoon.geslacht = geslacht
+				})
+				
+				callback( null, persoon )
+				
+			} else {
+				callback( err )
+			}
+		})
+		
+	} else {
+	
+		// Personen lijst of zoeken
+		// app.vermist ( categorie, [props], callback )
+		
+		// Eén $page bevat max 16 personen
+		
+		// CATEGORIE:
+		//	alles
+		//	kinderen
+		//	volwassenen
+		//	ongeidentificeerd
+		
+		// PROPS:
+		//	page		: pagina nummer
+		// 	query		: trefwoorden
+		// 	geoquery	: locatie
+		// 	distance	: afstand van `geoquery`  in KM, bijv. 2.0
+		
+		if( arguments.length == 2 ) {
+			// lijst
+			var categorie = arguments[0]
+			var callback = arguments[1]
+		} else if( arguments.length == 3 ) {
+			// zoeken
+			var categorie = arguments[0]
+			var props = arguments[1]
+			var callback = arguments[2]
 		}
-	})
+		
+		switch( categorie ) {
+			case 'kinderen':		var cat = '/vermiste-kinderen'; break
+			case 'volwassenen':		var cat = '/vermiste-volwassenen'; break
+			case 'ongeidentificeerd':	var cat = '/ongeidentificeerd'; break
+			case 'alles': default:		var cat = ''; break
+		}
+		
+		talk( 'vermist'+ cat, props, function( err, data ){
+			if( !err ) {
+				var personen = []
+				
+				data.replace( /<li class="profileBlock[^"]*">[\s\n]+<a href="(\/vermist\/([^\/]+)\/([0-9]{4})\/([a-z]+)\/[^\.]+\.html)" title="[^"]+">[\s\n]+<img class="profile" src="([^"]+)" alt="[^"]+"\/>[\s\n]+<span class="definition">([^<]+)<\/span>[\s\n]+Sinds: ([0-9]{2}\-[0-9]{2}\-[0-9]{4})<br\/>Laatst gezien in: ([^<]+)<\/a>[\s\n]+<\/li>/g, function( s, path, cat, jaar, maand, image, naam, sinds, locatie ) {
+					personen.push({
+						naam:		naam,
+						url:		'http://www.politie.nl'+ path,
+						thumbnail:	'http://www.politie.nl'+ image,
+						categorie:	cat,
+						vermistJaar:	jaar,
+						vermistMaand:	maand,
+						vermistDatum:	sinds,
+						vermistLocatie:	locatie
+					})
+				})
+				
+				callback( null, personen )
+			} else {
+				callback( err )
+			}
+		})
+	}
 }
 
-
-app.talk = function( path, props, callback ) {
+// Communicatie
+function talk( path, props, callback ) {
 	if( typeof props === 'function' ) {
 		var callback = props
 		var props = {}
@@ -245,5 +255,3 @@ app.talk = function( path, props, callback ) {
 	
 	request.end()
 }
-
-module.exports = app
