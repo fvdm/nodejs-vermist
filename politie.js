@@ -77,3 +77,5 @@ app.talk = function( path, props, callback ) {
 	
 	request.end()
 }
+
+module.exports = app
