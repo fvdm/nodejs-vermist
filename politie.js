@@ -64,6 +64,7 @@ app.talk = function( path, props, callback ) {
 		response.on( 'data', function( ch ) { data += ch })
 		response.on( 'close', function() { callback( new Error('connection dropped') ) })
 		response.on( 'end', function() {
+			data = data.toString('utf8').trim()
 			callback( null, data )
 		})
 	})
