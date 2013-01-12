@@ -31,8 +31,7 @@ For more information, please refer to <http://unlicense.org>
 */
 
 var http = require('http'),
-    querystring = require('querystring'),
-    app = { vermist: {}, gezocht: {} }
+    querystring = require('querystring')
 
 
 module.exports = function() {
