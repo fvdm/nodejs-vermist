@@ -4,28 +4,25 @@
     "email":              "fr@nkl.in",
     "url":                "http://frankl.in"
   },
-  "name":                 "politie",
-  "description":          "Unofficiële module voor publieke Politie informatie.",
-  "version":              "0.0.1",
+  "name":                 "vermist",
+  "description":          "Zoek vermiste personen op Politie.nl",
+  "version":              "1.0.0",
   "repository": {
     "type":               "git",
-    "url":                "git://github.com/fvdm/nodejs-politie.git"
+    "url":                "git://github.com/fvdm/nodejs-vermist.git"
   },
   "bugs": {
-    "url":                "https://github.com/fvdm/nodejs-politie/issues"
+    "url":                "https://github.com/fvdm/nodejs-vermist/issues"
   },
-  "main":                 "politie.js",
-  "dependencies": {
-    "xml2json":           ">= 0.3.2 <0.4.0"
-  },
+  "main":                 "vermist.js",
   "devDependencies":      {},
   "optionalDependencies": {},
   "engines": {
     "node":               "*"
   },
-  "keywords":             ["government", "politie"],
+  "keywords":             ["vermist", "missing", "personen", "politie"],
   "license": {
     "type":               "Public Domain",
-    "url":                "https://github.com/fvdm/nodejs-politie/raw/master/UNLICENSE"
+    "url":                "https://github.com/fvdm/nodejs-vermist/raw/master/UNLICENSE"
   }
 }
