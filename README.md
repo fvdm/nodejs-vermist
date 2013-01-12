@@ -49,13 +49,15 @@ Gebruik
 De module is slechts één functie die op twee manier aangesproken kan worden. De lijst is gesorteerd zoals het op de site staat.
 
 
-### Lijst
+## Lijst
+
+### vermist ( categorie, [filter object], callback )
 
 ```js
 var vermist = require('vermist')
 
 // gecombineerde lijst
-vermist( console.log )
+vermist( 'alles', console.log )
 
 // lijst categorie (alles, kinderen, volwassenen, ongeidentificeerd)
 vermist( 'kinderen', console.log )
@@ -84,7 +86,9 @@ vermist( 'kinderen', {geoquery: 'utrecht', distance: 10}, console.log )
 	distance   : afstand rond locatie in KM, bijv. 10
 
 
-### Persoon
+## Persoon
+
+### vermist ( url, callback )
 
 ```js
 ver vermist = require('vermist')
