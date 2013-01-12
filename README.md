@@ -18,6 +18,31 @@ Of van Github voor de meeste recente code:
 	npm install ./nodejs-vermist
 
 
+Errors
+------
+
+De callback geeft twee parameters terug: `err` en `data`, waarbij err is `instanceof Error` in het geval van een fout of `null` als alles in orde is.
+
+```js
+function callback( err, data ) {
+	if( !err ) {
+		console.log( data )
+	} else {
+		console.log( err )
+		console.log( err.stack )
+	}
+}
+```
+
+
+### Foutmeldingen
+
+	Error: request failed        Er kan geen verbinding worden gemaakt.
+	Error: connection dropped    De verbinding viel weg tijdens data ontvangst.
+	Error: not found             De opgevraagde URL is niet gevonden.
+	Error: service error         politie.nl geeft een fout.
+
+
 Gebruik
 -------
 
