@@ -1,0 +1,31 @@
+{
+  "author": {
+    "name":               "Franklin van de Meent",
+    "email":              "fr@nkl.in",
+    "url":                "http://frankl.in"
+  },
+  "name":                 "politie",
+  "description":          "Unofficiële module voor publieke Politie informatie.",
+  "version":              "0.0.1",
+  "repository": {
+    "type":               "git",
+    "url":                "git://github.com/fvdm/nodejs-politie.git"
+  },
+  "bugs": {
+    "url":                "https://github.com/fvdm/nodejs-politie/issues"
+  },
+  "main":                 "politie.js",
+  "dependencies": {
+    "xml2json":           ">= 0.3.2 <0.4.0"
+  },
+  "devDependencies":      {},
+  "optionalDependencies": {},
+  "engines": {
+    "node":               "*"
+  },
+  "keywords":             ["government", "politie"],
+  "license": {
+    "type":               "Public Domain",
+    "url":                "https://github.com/fvdm/nodejs-politie/raw/master/UNLICENSE"
+  }
+}
