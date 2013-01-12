@@ -45,7 +45,7 @@ app.talk = function( path, props, callback ) {
 		props = {}
 	}
 	
-	path += '?'+ querystring.stringify( props )
+	path = '/'+ path +'?'+ querystring.stringify( props )
 	
 	var options = {
 		host:		'www.politie.nl',
