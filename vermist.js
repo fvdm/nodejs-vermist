@@ -1,7 +1,7 @@
 /*
-Name:		politie.js - Unofficial module for Politie.nl resources
-Source:		https://github.com/fvdm/nodejs-politie
-Feedsback:	https://github.com/fvdm/nodejs-politie/issues
+Name:		vermist.js - Access missing persons on Politie.nl
+Source:		https://github.com/fvdm/nodejs-vermist
+Feedsback:	https://github.com/fvdm/nodejs-vermist/issues
 License:	Unlicense / Public Domain
 
 This is free and unencumbered software released into the public domain.
