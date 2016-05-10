@@ -68,6 +68,11 @@ function talk (path, params, callback) {
     }
   };
 
+  if (typeof params === 'function') {
+    callback = params;
+    options.parameters = null;
+  }
+
   httpreq.doRequest (options, function (err, res) {
     processResponse (err, res, callback);
   });
