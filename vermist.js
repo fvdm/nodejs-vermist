@@ -90,12 +90,93 @@ function talk (path, params, callback) {
  */
 
 function processPerson (err, data, callback) {
+  var person = {
+    article: {
+      image: {},
+      link: {}
+    },
+    location: {}
+  };
+
   if (err) {
     callback (err);
     return;
   }
 
-  callback (null, data);
+  data.replace (/<h1 id="page-content-title">([^<]+)<\/h1>/, function (str, val) {
+    person.article.title = val;
+  });
+
+  data.replace (/<span class="more j--toggler-trigger">([^<]+)<\/span>/, function (str, val) {
+    person.article.language = val;
+  });
+
+  data.replace (/<dt>Latest update:<\/dt>\s+<dd><time datetime="([^"]+)"><\/dd>/, function (str, val) {
+    person.article.latestUpdate = val;
+  });
+
+  data.replace (/<dt>Case number:<\/dt>\s+<dd>([^<]+)<\/dd>/, function (str, val) {
+    person.article.number = val;
+  });
+
+  data.replace (/<p class="introductie">([^<]+)<\/p>/, function (str, val) {
+    person.article.pretext = val;
+  });
+
+  data.replace (/<img class="opsporing-image" src="(https:[^"]+)" alt="([^"]+)"\/?>/, function (str, url, alt) {
+    person.article.image.alt = alt;
+    person.article.image.small = url;
+  });
+  
+  data.replace (/<a class="gallery-colorbox right-medium-up" href="(https:[^"]+)"[^>]+>/, function (str, url) {
+    person.article.image.large = url;
+  });
+
+  data.replace (/<a class="politiebloklink" href="(\/en\/wanted-and-missing\/[^\/]+\/eform\/.+\.html)">/, function (str, url) {
+    person.article.link.form = url;
+  });
+
+  data.replace (/<h2 class="visuallyhidden" id="omschrijving-title">Description<\/h2>\s(.+)<\/section>/, function (str, val) {
+    person.summary = val;
+  });
+
+  data.replace (/<h2 id="vraag-title">Questions<\/h2>\s+(.+)<\/section>/, function (str, val) {
+    person.questions = val;
+  });
+
+  data.replace (/<section id="opsporing-afbeeldingen"[^>]+>\s+<h2 id="afbeelding-title">Images<\/h2>\s+<ul[^>]+>\s+(.+)<\/ul>/, function (str, val) {
+    person.images = val;
+  });
+
+  data.replace (/src="(https:\/\/maps\.googleapis\.com\/maps\/api\/staticmap\?([^"]+))/, function (str, url, query) {
+    query.replace (/center=([-\d\.]+)%2c([-\d\.]+)/, function (str, lat, lon) {
+      person.location.geoCenterLatitude = lat;
+      person.location.geoCenterLongitude = lon;
+    });
+    
+    query.replace (/markers=([^&$]+)/, function (str, mrkrs) {
+      var val;
+      var i;
+
+      var markers = mrkrs.replace (/%7c/g, ' ');
+      markers = markers.trim ();
+      markers = markers.split (' ');
+
+      for (i = 0; i < markers.length; i++) {
+        val = markers[i].split ('%2c');
+        markers[i] = {
+          latitude: val[0],
+          longitude: val[1]
+        };
+      }
+
+      person.location.geoMarkers = markers;
+    });
+
+    person.location.geoImage = url;
+  });
+
+  callback (null, person);
 }
 
 
