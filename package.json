@@ -22,6 +22,9 @@
     "dotest": "^1.10.2",
     "eslint": "^2.9.0"
   },
+  "files": [
+    "UNLICENSE"
+  ],
   "engines": {
     "node": ">=0.12.0"
   },
