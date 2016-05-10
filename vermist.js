@@ -127,7 +127,7 @@ function processPerson (err, data, callback) {
     person.article.image.alt = alt;
     person.article.image.small = url;
   });
-  
+
   data.replace (/<a class="gallery-colorbox right-medium-up" href="(https:[^"]+)"[^>]+>/, function (str, url) {
     person.article.image.large = url;
   });
@@ -149,16 +149,17 @@ function processPerson (err, data, callback) {
   });
 
   data.replace (/src="(https:\/\/maps\.googleapis\.com\/maps\/api\/staticmap\?([^"]+))/, function (str, url, query) {
-    query.replace (/center=([-\d\.]+)%2c([-\d\.]+)/, function (str, lat, lon) {
+    query.replace (/center=([-\d\.]+)%2c([-\d\.]+)/, function (str2, lat, lon) {
       person.location.geoCenterLatitude = lat;
       person.location.geoCenterLongitude = lon;
     });
-    
-    query.replace (/markers=([^&$]+)/, function (str, mrkrs) {
+
+    query.replace (/markers=([^&$]+)/, function (str2, mrkrs) {
       var val;
       var i;
 
       var markers = mrkrs.replace (/%7c/g, ' ');
+
       markers = markers.trim ();
       markers = markers.split (' ');
 
