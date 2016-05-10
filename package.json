@@ -15,6 +15,9 @@
     "url": "https://github.com/fvdm/nodejs-vermist/issues"
   },
   "main": "vermist.js",
+  "dependencies": {
+    "httpreq": "^0.4.22"
+  },
   "devDependencies": {
     "dotest": "^1.10.2",
     "eslint": "^2.9.0"
@@ -28,8 +31,5 @@
     "personen",
     "politie"
   ],
-  "license": "Unlicense",
-  "dependencies": {
-    "httpreq": "^0.4.22"
-  }
+  "license": "Unlicense"
 }
