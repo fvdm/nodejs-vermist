@@ -1,28 +1,29 @@
 {
   "author": {
-    "name":               "Franklin van de Meent",
-    "email":              "fr@nkl.in",
-    "url":                "http://frankl.in"
+    "name": "Franklin van de Meent",
+    "email": "fr@nkl.in",
+    "url": "https://frankl.in"
   },
-  "name":                 "vermist",
-  "description":          "Zoek vermiste personen op Politie.nl",
-  "version":              "1.0.0",
+  "name": "vermist",
+  "description": "List missing persons from Politie.nl",
+  "version": "1.0.0",
   "repository": {
-    "type":               "git",
-    "url":                "git://github.com/fvdm/nodejs-vermist.git"
+    "type": "git",
+    "url": "git://github.com/fvdm/nodejs-vermist.git"
   },
   "bugs": {
-    "url":                "https://github.com/fvdm/nodejs-vermist/issues"
+    "url": "https://github.com/fvdm/nodejs-vermist/issues"
   },
-  "main":                 "vermist.js",
-  "devDependencies":      {},
-  "optionalDependencies": {},
+  "main": "vermist.js",
+  "devDependencies": {},
   "engines": {
-    "node":               "*"
+    "node": ">=0.12.0"
   },
-  "keywords":             ["vermist", "missing", "personen", "politie"],
-  "license": {
-    "type":               "Public Domain",
-    "url":                "https://github.com/fvdm/nodejs-vermist/raw/master/UNLICENSE"
-  }
+  "keywords": [
+    "vermist",
+    "missing",
+    "personen",
+    "politie"
+  ],
+  "license": "Unlicense"
 }
