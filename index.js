@@ -151,8 +151,10 @@ function processPerson (err, data, callback) {
 
   data.replace (/src="(https:\/\/maps\.googleapis\.com\/maps\/api\/staticmap\?([^"]+))/, function (str, url, query) {
     query.replace (/center=([-\d\.]+)%2c([-\d\.]+)/, function (str2, lat, lon) {
-      person.location.geoCenterLatitude = lat;
-      person.location.geoCenterLongitude = lon;
+      person.location.geoCenter = {
+        latitude: lat,
+        longitude: lon
+      };
     });
 
     query.replace (/markers=([^&$]+)/, function (str2, mrkrs) {
