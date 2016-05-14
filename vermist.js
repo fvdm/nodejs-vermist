@@ -293,5 +293,6 @@ function methodGet (input, params, callback) {
 
 module.exports = function (conf) {
   config.timeout = conf.timeout || config.timeout;
+  config.endpoint = conf.endpoint || config.endpoint;
   return methodGet;
 };
