@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/fvdm/nodejs-vermist/issues"
   },
-  "main": "vermist.js",
+  "main": "index.js",
   "dependencies": {
     "httpreq": "^0.4.22"
   },
