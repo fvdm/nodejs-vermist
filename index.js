@@ -151,7 +151,7 @@ function processPerson (err, data, callback) {
 
   data.replace (/src="(https:\/\/maps\.googleapis\.com\/maps\/api\/staticmap\?([^"]+))/, function (str, url, query) {
     query.replace (/center=([-\d\.]+)%2c([-\d\.]+)/, function (str2, lat, lon) {
-      person.location.geoCenter = {
+      person.location.center = {
         latitude: lat,
         longitude: lon
       };
@@ -174,10 +174,10 @@ function processPerson (err, data, callback) {
         };
       }
 
-      person.location.geoMarkers = markers;
+      person.location.markers = markers;
     });
 
-    person.location.geoImage = url;
+    person.location.image = url;
   });
 
   callback (null, person);
