@@ -10,6 +10,7 @@ License:      Unlicense (public domain, see UNLICENSE file)
 var httpreq = require ('httpreq');
 
 var config = {
+  endpoint: 'https://www.politie.nl',
   timeout: 5000
 };
 
@@ -60,7 +61,7 @@ function processResponse (err, res, callback) {
 
 function talk (path, params, callback) {
   var options = {
-    url: 'https://www.politie.nl' + path,
+    url: config.endpoint + path,
     parameters: params,
     method: 'GET',
     headers: {
@@ -133,7 +134,7 @@ function processPerson (err, data, callback) {
   });
 
   data.replace (/<a class="politiebloklink" href="(\/en\/wanted-and-missing\/[^\/]+\/eform\/.+\.html)">/, function (str, url) {
-    person.article.link.form = url;
+    person.article.link.form = config.endpoint + url;
   });
 
   data.replace (/<h2 class="visuallyhidden" id="omschrijving-title">Description<\/h2>\s(.+)<\/section>/, function (str, val) {
