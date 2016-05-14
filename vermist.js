@@ -116,7 +116,7 @@ function processPerson (err, data, callback) {
   });
 
   data.replace (/<dt>Case number:<\/dt>\s+<dd>([^<]+)<\/dd>/, function (str, val) {
-    person.article.number = val;
+    person.article.caseNumber = val;
   });
 
   data.replace (/<p class="introductie">([^<]+)<\/p>/, function (str, val) {
